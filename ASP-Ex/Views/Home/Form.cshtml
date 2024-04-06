@@ -1,0 +1,31 @@
+﻿@{
+	// Прийом моделі представлення здійснюється за допомогою наступної інструкції
+	ViewData["Title"] = "Form";
+}
+
+<form method="post" class="form mb-5">
+	<div class="column m-5 form-container">
+		<div class="text-center">
+			<h1 class="display-4 mb-5">Registration form</h1>
+		</div>
+		<div>
+			<div class="input-group mb-3">
+				<span class="input-group-text" id="user-name"><i class="bi bi-person-vcard"></i></span>
+				<input type="text" class="form-control" placeholder="Username"
+					   name="user-name"
+					   aria-label="Username" aria-describedby="user-name">
+			</div>
+		</div>
+		<div>
+			<div class="input-group mb-3">
+				<span class="input-group-text" id="user-email"><i class="bi bi-envelope-at"></i></span>
+				<input type="text" class="form-control" placeholder="Email"
+					   name="user-email"
+					   aria-label="Email" aria-describedby="user-email">
+			</div>
+		</div>
+		<div>
+			<button type="submit" class="btn btn-primary w-100">Sing Up</button>
+		</div>
+	</div>
+</form>
