@@ -1,5 +1,6 @@
 using ASP_Ex.Data;
 using ASP_Ex.Data.DAL;
+using ASP_Ex.Middleware;
 using ASP_Ex.Services.Hash;
 using ASP_Ex.Services.Kdf;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,16 @@ builder.Services.AddDbContext<DataContext>(
 
 builder.Services.AddSingleton<DataAccessor>();
 builder.Services.AddSingleton<IKdfService, Pbkdf1Service>();
+
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 
 var app = builder.Build();
 
@@ -40,6 +51,10 @@ app.UseCors(builder => builder
 				.AllowCredentials());
 
 app.UseAuthorization();
+
+app.UseSession();
+
+app.UseAuthSession();
 
 app.MapControllerRoute(
 	name: "default",

@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+@{
+    bool isAuthenticated = Context.User.Identity?.IsAuthenticated ?? false;
+    String name_user = isAuthenticated
+    ? Context.User.Claims.First(claim => claim.Type == ClaimTypes.Name).Value
+    : "";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -30,9 +38,22 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav flex-row-reverse">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Form"><i class="bi bi-person"></i></a>
-                        </li>
+                        @if (isAuthenticated)
+                        {
+                            <b>@name_user</b>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                                        data-bs-target="#authModal">
+                                    <i class="bi bi-person-check-fill"></i>
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Form"><i class="bi bi-person"></i></a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -49,6 +70,39 @@
             &copy; 2024 - Future Project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Sing in</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="auth-email-icon"><i class="bi bi-envelope-at"></i></span>
+                            <input type="text" id="auth-email" class="form-control" placeholder="Email"
+                                   aria-label="Email" aria-describedby="auth-email-icon">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="auth-password-icon"><i class="bi bi-lock"></i></span>
+                            <input type="password" id="auth-password" class="form-control" placeholder="Пароль"
+                                   aria-label="Password" aria-describedby="auth-password-icon">
+                        </div>
+                    </div>
+                    <p class="reg-form">Don't have an account? You can <a asp-area="" asp-controller="Home" asp-action="Form">register</a></p>
+                    <div id="auth-message" class="alert alert-danger visually-hidden" role="alert"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary w-100" id="auth-button">Enter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

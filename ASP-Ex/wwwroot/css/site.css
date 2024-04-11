@@ -40,3 +40,8 @@ body {
     width: 100%;
     margin-top: 20px;
 }
+.reg-form{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
