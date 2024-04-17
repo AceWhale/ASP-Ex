@@ -65,6 +65,11 @@ namespace ASP_Ex.Controllers
 			return View();
 		}
 
+        public ViewResult Admin()
+        {
+            return View();
+        }
+
 
         [HttpPost]     
         public JsonResult FrontendFrom([FromBody] FrontendFormInput input)

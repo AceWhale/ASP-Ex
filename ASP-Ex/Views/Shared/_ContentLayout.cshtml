@@ -40,10 +40,6 @@
                             <a class="nav-link text-dark" asp-area="" title="Адміністрування контенту"
                                asp-controller="Home" asp-action="Admin"><i class="bi bi-pencil-square"></i></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" title="Адміністрування контенту"
-                               asp-controller="Content" asp-action="Index"><i class="bi bi-house-heart-fill"></i></a>
-                        </li>
                     </ul>
                     <ul class="navbar-nav flex-row-reverse">
                         @if (isAuthenticated)
@@ -66,6 +62,10 @@
                 </div>
             </div>
         </nav>
+        <div class="sub-header">
+            <h2>Build your ideal PC</h2>
+            <h4>Selection of components for a powerful assembly</h4>
+        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -78,6 +78,7 @@
             &copy; 2024 - Future Project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
 
     <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

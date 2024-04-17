@@ -1,0 +1,11 @@
+﻿@model ASP_Ex.Models.Content.Index.ContentIndexPageModel
+
+@{
+	Layout = "_ContentLayout";
+}
+<div class="row row-cols-1 row-cols-md-2 g-4">
+	@foreach (var category in Model.Categories)
+	{
+		@Html.DisplayFor(m => category, "Category")
+	}
+</div>
