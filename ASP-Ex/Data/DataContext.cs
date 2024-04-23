@@ -6,6 +6,7 @@ namespace ASP_Ex.Data
     {
         public DbSet<Entities.User> Users { get; set; }
 		public DbSet<Entities.Category> Categories { get; set; }
+		public DbSet<Entities.Product> Products { get; set; }
 
 		public DataContext(DbContextOptions options) : base(options) { }
 

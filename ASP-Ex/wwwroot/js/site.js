@@ -46,7 +46,7 @@ function loadCategories() {
         .then(j => {
             let html = "";
             for (let ctg of j) {
-                html += `<p data-id="${ctg["id"]}">${ctg["name"]}</p>`;
+                html += `<p data-id="${ctg["id"]}" onclick="ctgClick('${ctg["id"]}')">${ctg["name"]}</p>`;
             }
             html += `Назва: <input id="ctg-name" /><br/>
             Опис: <textarea id="ctg-description"></textarea><br/>
@@ -76,6 +76,62 @@ function addCategory() {
             .then(r => {
                 if (r.status == 201) {
                     loadCategories();
+                }
+                else {
+                    alert("error");
+                }
+            });
+    }
+}
+
+function ctgClick(ctgid) {
+    //const ctgid = e.target.closest('[data-id]').getAttribute('data-id');
+    fetch("/api/product/" + ctgid)
+        .then(r => r.json())
+        .then(j => {
+            const container = document.getElementById("product-container");
+            let html = "";
+            for (let prod of j) {
+                html += `<p data-id="${prod["id"]}" onclick="prodClick(event)">${prod["name"]}</p>`;
+            }
+            html += `Назва: <input id="prod-name" /><br/>
+            Опис: <textarea id="prod-description"></textarea><br/>
+            Рейтинг: <input id="prod-stars" type="number"/><br/>
+            Фото: <input type="file" id="prod-photo" /><br/>
+            Цена: <input type="number" id="prod-price" /><br/>
+            Кол-во: <input type="number" id="prod-count" /><br/>
+            Slug: <input type="text" id="prod-slug" /><br/>
+            <button onclick='addProduct("${ctgid}")'>+</button>`;
+            container.innerHTML = html;
+        });
+}
+
+function addProduct(ctgid) {
+    const ctgName = document.getElementById("prod-name").value;
+    const ctgDescription = document.getElementById("prod-description").value;
+    const ctgStars = document.getElementById("prod-stars").value;
+    const locPhoto = document.getElementById("prod-photo");
+    const prodPrice = document.getElementById("prod-price").value;
+    const prodCount = document.getElementById("prod-count").value;
+    const prodSlug = document.getElementById("prod-slug").value;
+
+    if (confirm(`Додаємо продукт ${ctgName} ${ctgDescription} ${ctgStars} ?`)) {
+        let formData = new FormData();
+        formData.append("categoryId", ctgid);
+        formData.append("name", ctgName);
+        formData.append("description", ctgDescription);
+        formData.append("stars", ctgStars);
+        formData.append("photo", locPhoto.files[0]);
+        formData.append("price", prodPrice);
+        formData.append("count", prodCount);
+        formData.append("slug", prodSlug);
+        fetch("/api/product", {
+            method: 'POST',
+            body: formData
+        })
+            .then(r => {
+                if (r.status == 201) {
+                    ctgClick(ctgid);
                 }
                 else {
                     alert("error");

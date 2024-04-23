@@ -4,3 +4,10 @@
 	Layout = "_ContentLayout";
 }
 <h1>Category: @Model.Category.Name</h1>
+
+<div class="row row-cols-2 row-cols-md-4 g-5">
+@foreach (var product in Model.Products)
+{
+	@Html.DisplayFor(m => product, "ProductTemplate")
+}
+</div>

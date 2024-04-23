@@ -1,0 +1,14 @@
+﻿@model ASP_Ex.Models.Content.Product.ContentProductPageModel
+
+@using System.Security.Claims
+@{
+    bool isAuthenticated = Context.User.Identity?.IsAuthenticated ?? false;
+    bool isAdmin = isAuthenticated
+    ? Context
+    .User
+    .Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.UserData)
+    != null
+    : false;
+}
+
+<h1>Product: @Model.Product.Name</h1>

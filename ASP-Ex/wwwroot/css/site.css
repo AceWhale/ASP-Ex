@@ -54,3 +54,9 @@ body {
     height: 25vh;
     min-height: 150px;
 }
+
+.product-card-bottom{
+    display:flex;
+    justify-content:space-between;
+    padding:3px;
+}

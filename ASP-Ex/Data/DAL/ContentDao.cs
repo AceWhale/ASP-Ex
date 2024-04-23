@@ -75,6 +75,55 @@ namespace ASP_Ex.Data.DAL
 		{
 			DeleteCategory(category.Id);
 		}
-		
-	}
+
+
+        //////// PRODUCT //////////
+        public void AddProduct(String name, String description, Guid CategoryId, Double price,
+            int? Stars = null, int? count = null, Guid? CompanyId = null,
+            String? PhotoUrl = null, String? slug = null)
+        {
+            lock (_dblocker)
+            {
+                _context.Products.Add(new()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = name,
+                    Description = description,
+                    CategoryId = CategoryId,
+                    Stars = Stars,
+                    Count = count,
+					Price = price,
+                    CompanyId = CompanyId,
+                    DeleteDt = null,
+                    PhotoUrl = PhotoUrl,
+                    Slug = slug ?? name.Replace(" ", "_")
+                });
+                _context.SaveChanges();
+            }
+        }
+
+        public List<Product> GetProducts(String categorySlug)
+        {
+            var ctg = GetCategoryBySlug(categorySlug);
+            if (ctg == null)
+            {
+                return new List<Product>();
+            }
+            var query = _context
+                .Products
+                .Where(loc => loc.DeleteDt == null && loc.CategoryId == ctg.Id);
+
+            return query.ToList();
+        }
+
+        public Product? GetProductBySlug(String slug)
+        {
+            Product? ctg;
+            lock (_dblocker)
+            {
+                ctg = _context.Products.FirstOrDefault(c => c.Slug == slug);
+            }
+            return ctg;
+        }
+    }
 }

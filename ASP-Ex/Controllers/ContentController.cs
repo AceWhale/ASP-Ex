@@ -1,6 +1,7 @@
 ﻿using ASP_Ex.Data.DAL;
 using ASP_Ex.Models.Content.Category;
 using ASP_Ex.Models.Content.Index;
+using ASP_Ex.Models.Content.Product;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP_Ex.Controllers
@@ -27,7 +28,21 @@ namespace ASP_Ex.Controllers
                 : View(new ContentCategoryPageModel
                 {
                     Category = ctg,
+                    Products = _dataAccessor.ContentDao.GetProducts(ctg.Slug!)
+
                 });
         }
-	}
+
+        public IActionResult Product([FromRoute] String id)
+        {
+            var pr = _dataAccessor.ContentDao.GetProductBySlug(id);
+
+            return pr == null
+                ? View("NotFound")
+                : View(new ContentProductPageModel()
+                {
+                    Product = pr,
+                });
+        }
+    }
 }
