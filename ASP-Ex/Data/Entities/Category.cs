@@ -8,5 +8,7 @@
 		public DateTime? DeleteDt { get; set; }
 
 		public String? PhotoUrl { get; set; }
-	}
+
+        public String? Slug { get; set; }
+    }
 }

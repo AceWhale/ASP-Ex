@@ -15,7 +15,9 @@ namespace ASP_Ex.Data
         //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<Entities.Category>()
+                .HasIndex(c => c.Slug)
+                .IsUnique();
         }
     }
 }

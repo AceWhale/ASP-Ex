@@ -11,18 +11,22 @@ namespace ASP_Ex.Data.DAL
 			_context = context;
 			_dblocker = dblocker;
 		}
-		public void AddCategory(String name, String description, String? photoUrl)
+		public void AddCategory(String name, String description, String? photoUrl, String? slug = null)
 		{
-			_context.Categories.Add(new()
-			{
-				Id = Guid.NewGuid(),
-				Name = name,
-				Description = description,
-				DeleteDt = null,
-				PhotoUrl = photoUrl
-			});
-			_context.SaveChanges();
-		}
+            lock (_dblocker)
+            {
+                _context.Categories.Add(new()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = name,
+                    Description = description,
+                    DeleteDt = null,
+                    PhotoUrl = photoUrl,
+                    Slug = slug ?? name
+                });
+                _context.SaveChanges();
+            }
+        }
 		public List<Category> GetCategories()
 		{
 			List<Category> list;
@@ -34,7 +38,16 @@ namespace ASP_Ex.Data.DAL
 			}
 			return list;
 		}
-		public void UpdateCategory(Category category)
+        public Category? GetCategoryBySlug(String slug)
+        {
+            Category? ctg;
+            lock (_dblocker)
+            {
+                ctg = _context.Categories.FirstOrDefault(c => c.Slug == slug);
+            }
+            return ctg;
+        }
+        public void UpdateCategory(Category category)
 		{
 			var ctg = _context
 				.Categories

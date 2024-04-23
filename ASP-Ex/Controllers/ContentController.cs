@@ -1,4 +1,5 @@
 ﻿using ASP_Ex.Data.DAL;
+using ASP_Ex.Models.Content.Category;
 using ASP_Ex.Models.Content.Index;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +18,16 @@ namespace ASP_Ex.Controllers
 			return View(model);
 		}
 
-		public IActionResult Category([FromRoute] Guid id)
+		public IActionResult Category([FromRoute] String id)
 		{
-			return View();
-		}
+            var ctg = _dataAccessor.ContentDao.GetCategoryBySlug(id);
+
+            return ctg == null
+                ? View("NotFound")
+                : View(new ContentCategoryPageModel
+                {
+                    Category = ctg,
+                });
+        }
 	}
 }
