@@ -13,5 +13,7 @@
         public Double Price { get; set; }
         public String? PhotoUrl { get; set; }
         public String? Slug { get; set; }
+
+        public List<Basket> Baskets { get; set; } = [];
     }
 }

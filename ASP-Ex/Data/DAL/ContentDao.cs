@@ -1,4 +1,5 @@
 ﻿using ASP_Ex.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASP_Ex.Data.DAL
 {
@@ -121,7 +122,9 @@ namespace ASP_Ex.Data.DAL
             Product? ctg;
             lock (_dblocker)
             {
-                ctg = _context.Products.FirstOrDefault(c => c.Slug == slug);
+                ctg = _context.Products
+                    .Include(r => r.Baskets)
+                    .FirstOrDefault(c => c.Slug == slug);
             }
             return ctg;
         }

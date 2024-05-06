@@ -1,6 +1,12 @@
 ﻿@model ASP_Ex.Data.Entities.Product
+@using System.Security.Claims
 @{
     int prodCount = Model.Count!.Value;
+    bool isAuthenticated = Context.User.Identity?.IsAuthenticated ?? false;
+    Guid? userId = isAuthenticated
+    ? Guid.Parse(Context.User.Claims.First(claim => claim.Type == ClaimTypes.Sid).Value)
+    : null;
+
 }
 
 <div class="col">
@@ -9,24 +15,33 @@
             <img src="~/images/content/@(Model.PhotoUrl ?? "no-image.jpg")" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">@Model.Name</h5>
-                <div class="product-card-bottom">
-                    <p class="card-text"><span><i class="bi bi-star-fill"></i></span>@Model.Stars</p>
-                    @if (prodCount > 0)
-                    {
-                        <p class="card-text">
-                            In stock
-                        </p>
-                    }
-                    else
-                    {
-                        <p class="card-text">
-                            Out of stock
-                        </p>
-                    }
-                </div>
-                <p>Price: @Model.Price &#8372;</p>
-                <button type="button" class="btn btn-primary w-100">Order</button>
-            </div>
         </a>
+        <div class="product-card-bottom">
+            <p class="card-text"><span class="pe-lg-1"><i style="color:yellow" class="bi bi-star-fill"></i></span>@Model.Stars</p>
+            @if (prodCount > 0)
+            {
+                <p class="card-text">
+                    In stock
+                </p>
+            }
+            else
+            {
+                <p class="card-text">
+                    Out of stock
+                </p>
+            }
+        </div>
+        <div>
+            <p>Price: @Model.Price &#8372;</p>
+            @{
+                var basket = Model.Baskets.FirstOrDefault(r => r.UserId == userId);
+                bool inBasket = basket != null;
+            }
+            @if (prodCount > 0 )
+            {
+                <button type="button" class="btn btn-primary w-100">Order</button>
+            }
+        </div>
     </div>
+</div>
 </div>

@@ -7,6 +7,7 @@ namespace ASP_Ex.Data
         public DbSet<Entities.User> Users { get; set; }
 		public DbSet<Entities.Category> Categories { get; set; }
 		public DbSet<Entities.Product> Products { get; set; }
+		public DbSet<Entities.Basket> Baskets { get; set; }
 
 		public DataContext(DbContextOptions options) : base(options) { }
 
@@ -19,6 +20,15 @@ namespace ASP_Ex.Data
             modelBuilder.Entity<Entities.Category>()
                 .HasIndex(c => c.Slug)
                 .IsUnique();
-        }
+
+			modelBuilder.Entity<Entities.Basket>()
+				.HasOne(r => r.User)
+				.WithMany(r => r.Baskets)
+				.HasForeignKey(r => r.UserId);
+			modelBuilder.Entity<Entities.Basket>()
+				.HasOne(r => r.Product)
+				.WithMany(r => r.Baskets)
+				.HasForeignKey(r => r.ProductsId);
+		}
     }
 }

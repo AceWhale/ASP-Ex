@@ -60,3 +60,8 @@ body {
     justify-content:space-between;
     padding:3px;
 }
+
+.card a{
+    text-decoration:none;
+    color:inherit;
+}

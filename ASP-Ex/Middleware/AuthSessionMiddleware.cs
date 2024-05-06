@@ -22,7 +22,8 @@ namespace ASP_Ex.Middleware
                     Claim[] claims = new Claim[] {
                     new (ClaimTypes.Sid,        userId),
                     new (ClaimTypes.Email,      user.Email),
-                    new (ClaimTypes.Name,       user.Name)
+                    new (ClaimTypes.Name,       user.Name),
+                    new (ClaimTypes.Role,       user.Role ?? "")
                     };
 
                     context.User = new ClaimsPrincipal(

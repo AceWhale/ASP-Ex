@@ -4,6 +4,11 @@
     String name_user = isAuthenticated
     ? Context.User.Claims.First(claim => claim.Type == ClaimTypes.Name).Value
     : "";
+    String isAdmin = isAuthenticated
+    ? Context
+    .User
+    .Claims.First(claim => claim.Type == ClaimTypes.Role).Value
+    : "";
 }
 
 <!DOCTYPE html>
@@ -36,10 +41,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" title="Адміністрування контенту"
-                               asp-controller="Home" asp-action="Admin"><i class="bi bi-pencil-square"></i></a>
-                        </li>
+                        @if(isAdmin == "admin"){
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" title="Адміністрування контенту"
+                                   asp-controller="Home" asp-action="Admin"><i class="bi bi-pencil-square"></i></a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" title="Shop"
                                asp-controller="Content" asp-action="Index"><i class="bi bi-cart-dash"></i></a>

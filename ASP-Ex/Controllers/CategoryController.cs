@@ -55,8 +55,19 @@ namespace ASP_Ex.Controllers
 	}
 	public class CategoryPostModel
 	{
-		public String Name { get; set; }
-		public String Description { get; set; }
-		public IFormFile? Photo { get; set; }
-	}
+        [FromForm(Name = "category-name")]
+        public String Name { get; set; }
+
+
+        [FromForm(Name = "category-description")]
+        public String Description { get; set; }
+
+
+        [FromForm(Name = "category-slug")]
+        public String Slug { get; set; }
+
+
+        [FromForm(Name = "category-photo")]
+        public IFormFile? Photo { get; set; }
+    }
 }
