@@ -69,10 +69,27 @@ namespace ASP_Ex.Data.DAL
 			if (ctg != null)
 			{
 				ctg.DeleteDt = DateTime.Now;
-				_context.SaveChanges();
-			}
+                lock (_dblocker)
+                {
+                    _context.SaveChanges();
+                }
+            }
 		}
-		public void DeleteCategory(Category category)
+        public void RestoreCategory(Guid id)
+        {
+            var ctg = _context
+                .Categories
+                .Find(id);
+            if (ctg != null || ctg.DeleteDt != null)
+            {
+                ctg.DeleteDt = null;
+                lock (_dblocker)
+                {
+                    _context.SaveChanges();
+                }
+            }
+        }
+        public void DeleteCategory(Category category)
 		{
 			DeleteCategory(category.Id);
 		}

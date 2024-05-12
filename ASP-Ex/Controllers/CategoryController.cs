@@ -52,7 +52,44 @@ namespace ASP_Ex.Controllers
 			}
 
 		}
-	}
+
+        [HttpDelete("{id}")]
+        public String DoDelete(Guid id)
+        {
+            _dataAccessor.ContentDao.DeleteCategory(id);
+            Response.StatusCode = StatusCodes.Status202Accepted;
+            return "OK";
+        }
+
+        public String DoOther()
+        {
+            // дані про метод запиту - у Request. Method
+            if (Request.Method == "RESTORE")
+            {
+                return DoRestore();
+            }
+            Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
+            return "Method not Allowed";
+        }
+        // Другий НЕ позначений метод має бути private щоб не було конфлікту
+        private String DoRestore()
+        {
+            // Через відсутність атрибутів, автоматичного зв'язування параметрі
+            // немає, параметри дістаємо з колекцій Request
+            String? id = Request.Query["id"].FirstOrDefault();
+            try
+            {
+                _dataAccessor.ContentDao.RestoreCategory(Guid.Parse(id!));
+            }
+            catch
+            {
+                Response.StatusCode = StatusCodes.Status400BadRequest;
+                return "Empty or invalid id";
+            }
+            Response.StatusCode = StatusCodes.Status202Accepted;
+            return "RESTORE works with id: " + id;
+        }
+    }
 	public class CategoryPostModel
 	{
         [FromForm(Name = "category-name")]

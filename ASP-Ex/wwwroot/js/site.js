@@ -3,6 +3,7 @@
     if (authButton) authButton.addEventListener('click', authButtonClick);
 
     initAdminPage();
+    serveAdminButtons();
 });
 
 function authButtonClick() {
@@ -37,6 +38,53 @@ function authButtonClick() {
 ///// ADMIN PAGE //////
 function initAdminPage() {
     loadCategories();
+}
+
+function serveAdminButtons() {
+    for (let btn of document.querySelectorAll('[data-type="delete-category"]')) {
+        btn.addEventListener("click", e => {
+            let b = e.target.closest('[data-type="delete-category"]');
+            let id = b.getAttribute("data-category-id");
+            if (id) {
+                if (confirm("Ви підтверджуєте видалення категорії?")) {
+                    fetch(`/api/category/${id}`, { method: 'DELETE' }).then(r => {
+                        if (r.status < 400) {
+                            window.location.reload();
+                        }
+                        else {
+                            alert("Виникла помилка видалення");
+                        }
+                    })
+                }
+            }
+            else {
+                alert("Помилка розмітки - немає id елемента");
+            }
+        });
+    }
+
+    for (let btn of document.querySelectorAll('[data-type="restore-category"]')) {
+        btn.addEventListener("click", e => {
+            let b = e.target.closest('[data-type="restore-category"]');
+            let id = b.getAttribute("data-category-id");
+            if (id) {
+                if (confirm("Ви підтверджуєте вiдновлення категорії?")) {
+                    fetch(`/api/category?id=${id}`, { method: 'RESTORE' }).then(r => {
+                        if (r.status < 400) {
+                            window.location.reload();
+                            //r.text().then(console.log);
+                        }
+                        else {
+                            alert("Виникла помилка вiдновлення");
+                        }
+                    })
+                }
+            }
+            else {
+                alert("Помилка розмітки - немає id елемента");
+            }
+        });
+    }
 }
 function loadCategories() {
     const container = document.getElementById("category-container");
